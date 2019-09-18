@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-17 15:57:25
- * @LastEditTime: 2019-09-17 16:18:57
+ * @LastEditTime: 2019-09-18 13:48:34
  * @LastEditors: Please set LastEditors
  */
 const hljs = require("highlight.js");
@@ -51,7 +51,7 @@ const renderHighlight = function(str, lang) {
     } catch (err) {}
 };
 
-export {
+module.exports = {
     fetch,
     replaceDelimiters,
     renderHighlight
