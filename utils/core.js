@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-18 10:10:38
- * @LastEditTime: 2019-09-18 17:34:34
+ * @LastEditTime: 2019-09-19 18:55:09
  * @LastEditors: Please set LastEditors
  */
 var loaderUtils = require('loader-utils');
@@ -73,6 +73,7 @@ var renderVueTemplate = function(html, wrapper) {
 };
 
 module.exports = function(source) {
+    console.log("OPTIONS::::", this)
     this.cacheable && this.cacheable();
     var parser, preprocess;
     var opts = loaderUtils.getOptions(this);
@@ -104,10 +105,12 @@ module.exports = function(source) {
         parser = markdown(opts.preset, opts);
 
         //add ruler:extract script and style tags from html token content
+        console.log("!preventExtract", !preventExtract);
         !preventExtract &&
             parser.core.ruler.push('extract_script_or_style', function replace(
                 state
             ) {
+                console.log("state.tokens:::::::::::::", state)
                 let tag_reg = new RegExp('<(script|style)(?:[^<]|<)+</\\1>', 'g');
                 let newTokens = [];
                 state.tokens
@@ -123,9 +126,9 @@ module.exports = function(source) {
                         }
                     });
                 state.tokens.push.apply(state.tokens, newTokens);
-                console.log("state.tokens:::::::::::::", state.tokens)
+
+                console.log("state.tokens1:::::::::::::", parser)
             });
-        debugger
         if (plugins) {
             plugins.forEach(function(plugin) {
                 if (Array.isArray(plugin)) {
@@ -156,18 +159,16 @@ module.exports = function(source) {
     }
 
     overrideParserRules(['code_inline', 'code_block', 'fence']);
+    console.log("SOURCE:::::::::::::::", source)
 
     if (preprocess) {
         source = preprocess.call(this, parser, source);
     }
-    console.log('this.plugin:::::::::::', this)
-    console.log('this.Source:::::::::::', source)
-
-    source = source.replace(/@/g, '__at__');
+    source = source.replace(/@/g, '__at__'); //字符转义
 
     var content = parser.render(source).replace(/__at__/g, '@');
     var result = renderVueTemplate(content, opts.wrapper);
-
+    debugger
     if (opts.raw) {
         return result;
     } else {

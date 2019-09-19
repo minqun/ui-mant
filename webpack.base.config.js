@@ -52,7 +52,6 @@ md.core.ruler.push('update_template', function replace(state) {
     let code = '';
     let sourceCode = '';
     let tokens = state.tokens;
-    console.log("state:::::", tokens, '1')
     tokens.forEach(token => {
 
         if (token.type === 'html_block') {
