@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-18 17:20:47
- * @LastEditTime: 2019-09-19 18:53:29
+ * @LastEditTime: 2019-09-20 10:18:47
  * @LastEditors: Please set LastEditors
  -->
 <cn>中文</cn>
@@ -12,7 +12,7 @@
     <div id="test">我在测试结果</div> 
 </template>    
 <script>
-    alert(333);
+    console.log(333)
 </script>  
 
 ```

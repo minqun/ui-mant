@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-18 10:10:38
- * @LastEditTime: 2019-09-19 18:55:09
+ * @LastEditTime: 2019-09-20 15:33:01
  * @LastEditors: Please set LastEditors
  */
 var loaderUtils = require('loader-utils');
@@ -18,6 +18,7 @@ var Token = require('markdown-it/lib/token');
  * @return {string}
  */
 var addVuePreviewAttr = function(str) {
+    console.log(str, 'str')
     return str.replace(/(<pre|<code)/g, '$1 v-pre');
 };
 
@@ -53,7 +54,6 @@ var renderVueTemplate = function(html, wrapper) {
         script: $.html($('script').first())
     };
     var result;
-
     $('style').remove();
     $('script').remove();
     if (wrapper) {
@@ -73,7 +73,6 @@ var renderVueTemplate = function(html, wrapper) {
 };
 
 module.exports = function(source) {
-    console.log("OPTIONS::::", this)
     this.cacheable && this.cacheable();
     var parser, preprocess;
     var opts = loaderUtils.getOptions(this);
@@ -83,7 +82,6 @@ module.exports = function(source) {
         delete opts.preventExtract;
         preventExtract = true;
     }
-
     if (typeof opts.render === 'function') {
         parser = opts;
     } else {
@@ -110,7 +108,6 @@ module.exports = function(source) {
             parser.core.ruler.push('extract_script_or_style', function replace(
                 state
             ) {
-                console.log("state.tokens:::::::::::::", state)
                 let tag_reg = new RegExp('<(script|style)(?:[^<]|<)+</\\1>', 'g');
                 let newTokens = [];
                 state.tokens
@@ -126,8 +123,6 @@ module.exports = function(source) {
                         }
                     });
                 state.tokens.push.apply(state.tokens, newTokens);
-
-                console.log("state.tokens1:::::::::::::", parser)
             });
         if (plugins) {
             plugins.forEach(function(plugin) {
@@ -145,22 +140,23 @@ module.exports = function(source) {
      * @param {Array<string>} rules rules to override
      */
     function overrideParserRules(rules) {
+        console.log(parser && parser.renderer && parser.renderer.rules, parser.renderer.rules)
         if (parser && parser.renderer && parser.renderer.rules) {
             var parserRules = parser.renderer.rules;
             rules.forEach(function(rule) {
                 if (parserRules && parserRules[rule]) {
                     var defaultRule = parserRules[rule];
                     parserRules[rule] = function() {
+                        console.log("arguments:::::", arguments)
                         return addVuePreviewAttr(defaultRule.apply(this, arguments));
                     };
                 }
             });
         }
+        console.log(parser && parser.renderer && parser.renderer.rules, parser.renderer.rules)
     }
 
     overrideParserRules(['code_inline', 'code_block', 'fence']);
-    console.log("SOURCE:::::::::::::::", source)
-
     if (preprocess) {
         source = preprocess.call(this, parser, source);
     }
@@ -168,7 +164,7 @@ module.exports = function(source) {
 
     var content = parser.render(source).replace(/__at__/g, '@');
     var result = renderVueTemplate(content, opts.wrapper);
-    debugger
+    // debugger
     if (opts.raw) {
         return result;
     } else {

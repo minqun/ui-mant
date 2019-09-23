@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-17 15:09:06
- * @LastEditTime: 2019-09-18 17:44:48
+ * @LastEditTime: 2019-09-20 09:38:19
  * @LastEditors: Please set LastEditors
  */
 const path = require("path");
@@ -42,7 +42,6 @@ const md = require("markdown-it")("default", {
 const cnReg = new RegExp('<(cn)(?:[^<]|<)+</\\1>', 'g');
 const usReg = new RegExp('<(us)(?:[^<]|<)+</\\1>', 'g');
 md.core.ruler.push('update_template', function replace(state) {
-    console.log("state:::::", state)
     let cn = '';
     let us = '';
     let template = '';
