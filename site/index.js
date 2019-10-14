@@ -1,27 +1,43 @@
 /*
  * @Description: In User Settings Edit
  * @Author: your name
- * @Date: 2019-09-18 11:29:54
- * @LastEditTime: 2019-10-14 17:48:02
- * @LastEditors: Please set LastEditors
+ * @Date: 2019-10-14 17:57:00
+ * @LastEditTime: 2019-10-14 17:57:00
+ * @LastEditors: your name
  */
-import 'babel-polyfill'; // es6高级语法支持
+import 'babel-polyfill';
+import '../components/style.js';
 import './index.less';
+import 'nprogress/nprogress.css';
 import 'highlight.js/styles/solarized-light.css';
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VueI18n from 'vue-i18n';
 import VueRouter from 'vue-router';
 import VueClipboard from 'vue-clipboard2';
-// import Md from './components/md';
-// import Api from './components/api';
+import NProgress from 'nprogress';
+import routes from './routes';
+import Md from './components/md';
+import Api from './components/api';
 import './components';
 import demoBox from './components/demoBox';
 import demoContainer from './components/demoContainer';
-import Test from './components/index.vue';
-import zhCN from './lang/zh-CN';
-import enUS from './lang/en-US';
+import zhCN from './theme/zh-CN';
+import enUS from './theme/en-US';
+import { isZhCN } from './util';
+
+const mountedCallback = {
+    install: (Vue, options) => {
+        Vue.directive('mountedCallback', {
+            inserted: function(el, binding, vnode) {
+                binding.value(vnode);
+            },
+        });
+    },
+};
+
 Vue.use(Vuex);
+Vue.use(mountedCallback);
 Vue.use(VueClipboard);
 Vue.use(VueRouter);
 Vue.use(VueI18n);
@@ -31,7 +47,7 @@ Vue.component('demo-box', demoBox);
 Vue.component('demo-container', demoContainer);
 
 const i18n = new VueI18n({
-    locale: enUS.locale,
+    locale: isZhCN(location.pathname) ? zhCN.locale : enUS.locale,
     messages: {
         [enUS.locale]: { message: enUS.messages },
         [zhCN.locale]: { message: zhCN.messages },
@@ -40,7 +56,14 @@ const i18n = new VueI18n({
 
 const router = new VueRouter({
     mode: 'history',
-    routes: [{ path: '/*', component: Test }],
+    fallback: false,
+    routes,
+});
+router.beforeEach((to, from, next) => {
+    if (to.path !== from.path) {
+        NProgress.start();
+    }
+    next();
 });
 
 const store = new Vuex.Store({
@@ -53,6 +76,7 @@ const store = new Vuex.Store({
         },
     },
 });
+
 new Vue({
     el: '#app',
     i18n,
