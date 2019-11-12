@@ -25,8 +25,8 @@ Vue.use(Vuex);
 Vue.use(VueClipboard);
 Vue.use(VueRouter);
 Vue.use(VueI18n);
-Vue.component(Md.name, Md);
-Vue.component(Api.name, Api);
+// Vue.component(Md.name, Md);
+// Vue.component(Api.name, Api);
 Vue.component('demo-box', demoBox);
 Vue.component('demo-container', demoContainer);
 

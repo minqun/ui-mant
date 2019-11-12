@@ -6,20 +6,12 @@
  * @LastEditors: Please set LastEditors
  -->
 <template>
-  <div>
-    测试
-    <testBox></testBox>
-  </div>
+  <div>测试</div>
 </template>
 <script>
-import testBox from "./index.md";
 export default {
-  components: {
-    testBox
-  },
+  components: {},
   data() {},
-  mounted() {
-    console.log(testBox);
-  }
+  mounted() {},
 };
 </script>

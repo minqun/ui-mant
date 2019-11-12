@@ -9,23 +9,23 @@
   <section></section>
 </template>
 <script>
-import animate from "antd/_util/openAnimation";
-import BaseMixin from "antd/_util/BaseMixin";
+import animate from 'antd/_util/openAnimation';
+import BaseMixin from 'antd/_util/BaseMixin';
 export default {
-  name: "DemoBox",
+  name: 'DemoBox',
   mixins: [BaseMixin],
   props: {
     jsfiddle: Object,
-    isIframe: Boolean
+    isIframe: Boolean,
   },
   inject: {
     iframeDemo: { default: {} },
-    demoContext: { default: {} }
+    demoContext: { default: {} },
   },
   data() {
-    const { name = "" } = this.demoContext;
+    const { name = '' } = this.demoContext;
     const { us, cn, sourceCode } = this.jsfiddle;
-  }
+  },
 };
 </script>
 <style scoped lang="less">
